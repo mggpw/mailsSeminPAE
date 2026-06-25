@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Correos Académicos - PAE</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        untref: {
+                            50: '#f5f7fa',
+                            100: '#e4e8f0',
+                            200: '#c2cbdc',
+                            600: '#3b5a85',
+                            700: '#2f496e',
+                            800: '#243956',
+                            900: '#1b2a40',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Encabezado Principal -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-untref-700 text-white rounded-xl flex items-center justify-center shadow-md shadow-untref-700/20">
+                    <i class="fa-solid fa-envelope-open-text text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-untref-800 dark:text-slate-100">Gestor de Mails PAE</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Coordinación de Seminarios • UNTREF</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <!-- Botón de Modo Oscuro -->
+                <button id="themeToggle" class="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors" title="Cambiar tema">
+                    <i class="fa-solid fa-sun hidden dark:inline"></i>
+                    <i class="fa-solid fa-moon inline dark:hidden"></i>
+                </button>
+                
+                <!-- Botón Limpiar Formulario -->
+                <button id="resetFormBtn" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-trash-can"></i> Limpiar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Formulario (Lado Izquierdo) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 sm:p-6 transition-colors">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-white mb-5 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700 pb-3">
+                    <i class="fa-solid fa-sliders text-untref-700 dark:text-slate-400"></i>
+                    Parámetros del Correo
+                </h2>
+                
+                <form id="mailForm" class="space-y-5">
+                    <!-- Docente y Envío -->
+                    <div class="space-y-4">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Datos del Docente</label>
+                        
+                        <!-- Modo de Redacción: Singular o Plural -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Redacción de destinatario:</label>
+                            <div class="grid grid-cols-2 gap-2" id="recipientModeContainer">
+                                <button type="button" id="modePluralBtn" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-untref-700 bg-untref-50 dark:bg-slate-700/50 text-untref-800 dark:text-white font-semibold transition-all text-xs">
+                                    <i class="fa-solid fa-users text-sm"></i>
+                                    Equipo (Plural)
+                                </button>
+                                <button type="button" id="modeSingularBtn" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs">
+                                    <i class="fa-solid fa-user text-sm"></i>
+                                    Una persona (Singular)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="profSelect" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre de la Profesora / Profesor / Equipo</label>
+                            <select id="profSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all mb-2 text-sm">
+                                <option value="" disabled selected>-- Seleccione un docente o equipo --</option>
+                                <option value="Alberto y equipo">Alberto y equipo</option>
+                                <option value="Carina">Carina</option>
+                                <option value="Cristian">Cristian</option>
+                                <option value="Elisa y equipo">Elisa y equipo</option>
+                                <option value="Eugenia y equipo">Eugenia y equipo</option>
+                                <option value="Felicitas">Felicitas</option>
+                                <option value="Gabriel">Gabriel</option>
+                                <option value="Gabriela">Gabriela</option>
+                                <option value="Gabriela y Beatriz">Gabriela y Beatriz</option>
+                                <option value="Guillermo">Guillermo</option>
+                                <option value="Gustavo y Gabriel">Gustavo y Gabriel</option>
+                                <option value="José y equipo">José y equipo</option>
+                                <option value="Leonardo">Leonardo</option>
+                                <option value="Lilia y Equipo">Lilia y Equipo</option>
+                                <option value="Lucrecia">Lucrecia</option>
+                                <option value="Mariana">Mariana</option>
+                                <option value="Marisa">Marisa</option>
+                                <option value="Mónica">Mónica</option>
+                                <option value="Natalia">Natalia</option>
+                                <option value="Norberto y Gabriela">Norberto y Gabriela</option>
+                                <option value="Pablo">Pablo</option>
+                                <option value="Pablo, Graciela y Martín">Pablo, Graciela y Martín</option>
+                                <option value="Pablo y Laura">Pablo y Laura</option>
+                                <option value="Verónica">Verónica</option>
+                                <option value="Viviana">Viviana</option>
+                                <option value="custom_prof">-- Otro (Ingresar manualmente) --</option>
+                            </select>
+                            <input type="text" id="profName" placeholder="Ej. Dra. María González" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all hidden">
+                        </div>
+                        <div>
+                            <label for="profEmail" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Correo Electrónico (opcional)</label>
+                            <input type="email" id="profEmail" placeholder="ejemplo@untref.edu.ar" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100 dark:border-slate-700">
+
+                    <!-- Seminario -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Información de la Materia</label>
+                        <div>
+                            <label for="seminarSelect" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre del Seminario</label>
+                            <select id="seminarSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all mb-2 text-sm">
+                                <option value="" disabled selected>-- Seleccione un seminario --</option>
+                                <option value="Calidad y Evaluación de la Educación.">Calidad y Evaluación de la Educación.</option>
+                                <option value="Configuración y expansión de la educación secundaria: modelo institucional, regulación y cambio.">Configuración y expansión de la educación secundaria: modelo institucional, regulación y cambio.</option>
+                                <option value="Crisis del lazo social y la experiencia escolar de jóvenes en el sistema educativo.">Crisis del lazo social y la experiencia escolar de jóvenes en el sistema educativo.</option>
+                                <option value="Desarrollo Curricular y Calidad de la Educación">Desarrollo Curricular y Calidad de la Educación</option>
+                                <option value="Desigualdades educativas con perspectiva étnico-racial e interseccional en América Latina">Desigualdades educativas con perspectiva étnico-racial e interseccional en América Latina</option>
+                                <option value="Didáctica en el Nivel de la Educación Superior">Didáctica en el Nivel de la Educación Superior</option>
+                                <option value="Diseño y Gestión Curricular">Diseño y Gestión Curricular</option>
+                                <option value="Epistemología y Métodos de la Investigación">Epistemología y Métodos de la Investigación</option>
+                                <option value="Escolaridades en contextos de pobreza urbana">Escolaridades en contextos de pobreza urbana</option>
+                                <option value="Financiamiento de la Educación Superior">Financiamiento de la Educación Superior</option>
+                                <option value="Formación de Formadores">Formación de Formadores</option>
+                                <option value="Fundamentos y metodología de los formadores en contextos diversos">Fundamentos y metodología de los formadores en contextos diversos</option>
+                                <option value="Gestión y Evaluación de Instituciones Educativas">Gestión y Evaluación de Instituciones Educativas</option>
+                                <option value="Gestión y Evaluación de Programas Educativos">Gestión y Evaluación de Programas Educativos</option>
+                                <option value="Gestión y Financiamiento de la Educación Superior">Gestión y Financiamiento de la Educación Superior</option>
+                                <option value="Ingreso, Acceso e Inicios a la Vida Universitaria">Ingreso, Acceso e Inicios a la Vida Universitaria</option>
+                                <option value="Las emociones en educación">Las emociones en educación</option>
+                                <option value="Metodologías Cualitativas: instrumentos de recolección y procesamiento de datos">Metodologías Cualitativas: instrumentos de recolección y procesamiento de datos</option>
+                                <option value="Pasantía de investigación (se debe subir el informe y la nota del director) Prof receptor Galli">Pasantía de investigación (se debe subir el informe y la nota del director) Prof receptor Galli</option>
+                                <option value="Pasantía Profesional (se debe subir el informe y la nota del tutor) Prof receptor Galli">Pasantía Profesional (se debe subir el informe y la nota del tutor) Prof receptor Galli</option>
+                                <option value="Pensar los afectos en clave socioeducativa. Aportes para la micro política escolar">Pensar los afectos en clave socioeducativa. Aportes para la micro política escolar</option>
+                                <option value="Perspectivas des…">Perspectivas des…</option>
+                                <option value="Planeamiento y Gestión de Políticas Educativas">Planeamiento y Gestión de Políticas Educativas</option>
+                                <option value="Planificación y Gestión de Políticas Públicas">Planificación y Gestión de Políticas Públicas</option>
+                                <option value="Políticas y Sistemas Educativos. Perspectiva Histórica y Comparada">Políticas y Sistemas Educativos. Perspectiva Histórica y Comparada</option>
+                                <option value="Problemas Filosóficos  de la Educación Contemporánea">Problemas Filosóficos  de la Educación Contemporánea</option>
+                                <option value="Problemáticas Actuales de la Educación Superior. Perspectiva Argentina y Comparada">Problemáticas Actuales de la Educación Superior. Perspectiva Argentina y Comparada</option>
+                                <option value="Seminario de Problemáticas Actuales del Sistema Educativo, la Administración y la Gestión Educ…">Seminario de Problemáticas Actuales del Sistema Educativo, la Administración y la Gestión Educ…</option>
+                                <option value="Seminario Permanente sobre Educación y Futuro en América Latina - Cátedra UNESCo.">Seminario Permanente sobre Educación y Futuro en América Latina - Cátedra UNESCo.</option>
+                                <option value="Sistemas de Información para la Gestión.">Sistemas de Información para la Gestión.</option>
+                                <option value="Sistemas Educativos: aspectos normativos, institucionales y organizativos.">Sistemas Educativos: aspectos normativos, institucionales y organizativos.</option>
+                                <option value="Supervisión y Dirección de Instituciones Educativas.">Supervisión y Dirección de Instituciones Educativas.</option>
+                                <option value="Taller de Tesis.">Taller de Tesis.</option>
+                                <option value="Taller de TFI.">Taller de TFI.</option>
+                                <option value="Tecnología Educativa.">Tecnología Educativa.</option>
+                                <option value="Tecnologías de Planificación y Gestión.">Tecnologías de Planificación y Gestión.</option>
+                                <option value="Teorías de la Administración y las Organizaciones">Teorías de la Administración y las Organizaciones</option>
+                                <option value="custom">-- Otro (Ingresar manualmente) --</option>
+                            </select>
+                            <input type="text" id="seminarName" placeholder="Escriba el nombre del seminario aquí..." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all hidden">
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100 dark:border-slate-700">
+
+                    <!-- Horarios -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Días y Horarios del Cursado</label>
+                        <div class="space-y-2">
+                            <span class="block text-sm font-medium text-slate-700 dark:text-slate-300">Seleccione una o más opciones predefinidas:</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="schedulesContainer">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="schedule" value="Viernes 17 a 22hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">Viernes 17 a 22hs</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="schedule" value="Sábado de 10 a 14hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">Sábado 10 a 14hs</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="schedule" value="Sábado de 9 a 13hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">Sábado 9 a 13hs</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="schedule" value="Lunes de 18 a 21hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">Lunes 18 a 21hs</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="schedule" value="Miércoles de 17 a 20hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">Miércoles 17 a 20hs</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="schedule" value="Jueves de 17 a 22hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">Jueves 17 a 22hs</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="customSchedule" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">U otro horario no listado:</label>
+                            <input type="text" id="customSchedule" placeholder="Ej. Martes de 14 a 18hs" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100 dark:border-slate-700">
+
+                    <!-- Encuentros Presenciales / Remotos -->
+                    <div class="space-y-4">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Detalle de los Encuentros</label>
+                        
+                        <div>
+                            <label for="inPersonSessions" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Encuentros Presenciales</label>
+                            <textarea id="inPersonSessions" rows="2" placeholder="Ej. 15 y 22 de Mayo de 17 a 22hs en Sede Maipú." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all resize-y text-sm"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="remoteSessions" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Encuentros Remotos Sincrónicos</label>
+                            <textarea id="remoteSessions" rows="2" placeholder="Ej. 29 de Mayo y 5 de Junio vía Zoom en el mismo horario." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all resize-y text-sm"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="meetingLink" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Enlace de los encuentros (Zoom/Meet)</label>
+                            <input type="text" id="meetingLink" placeholder="Ej. https://us02web.zoom.us/j/123456789" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-100 dark:border-slate-700">
+
+                    <!-- Alumnos y Entrega Final -->
+                    <div class="space-y-4">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Estudiantes y Evaluación</label>
+                        
+                        <div>
+                            <label for="studentList" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Listado de Estudiantes</label>
+                            <textarea id="studentList" rows="2" placeholder="Ej. Adjunto en planilla Excel / Ver pestaña Alumnos..." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all resize-y text-sm"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Plazo Trabajo Final</label>
+                            <div class="grid grid-cols-2 gap-2 mb-2" id="deadlinesContainer">
+                                <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors text-xs text-center">
+                                    <input type="radio" name="deadline" value="30/5" class="sr-only">
+                                    <span>30 de Mayo </span>
+                                </label>
+                                <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors text-xs text-center">
+                                    <input type="radio" name="deadline" value="30/9" class="sr-only">
+                                    <span>30 de Septiembre </span>
+                                </label>
+                                <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors text-xs text-center">
+                                    <input type="radio" name="deadline" value="30/10" class="sr-only">
+                                    <span>30 de Octubre </span>
+                                </label>
+                                <label class="flex items-center justify-center p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors text-xs text-center">
+                                    <input type="radio" name="deadline" value="28/2" class="sr-only">
+                                    <span>28 de Febrero </span>
+                                </label>
+                            </div>
+                            <div>
+                                <label for="customDeadline" class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">U otra fecha personalizada:</label>
+                                <input type="text" id="customDeadline" placeholder="Ej. 15 de Julio" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-untref-600 focus:border-transparent transition-all">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Vista Previa del Correo (Lado Derecho) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- Simulador de Cliente de Correo -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col overflow-hidden transition-colors flex-1 min-h-[500px]">
+                
+                <!-- Encabezado del "Mail" -->
+                <div class="bg-slate-50 dark:bg-slate-850 p-4 border-b border-slate-200 dark:border-slate-700 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                            Vista Previa en Vivo
+                        </span>
+                        
+                        <div class="flex items-center gap-2">
+                            <span id="recipientBadge" class="px-2 py-0.5 bg-untref-100 dark:bg-slate-750 text-untref-700 dark:text-slate-300 text-[10px] font-bold rounded-md">
+                                Destinatario: Equipo
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
+                        <span class="text-slate-400 font-medium">De:</span>
+                        <span class="font-medium text-slate-800 dark:text-slate-200">ggalli@untref.edu.ar <span class="text-xs text-slate-400 dark:text-slate-500 font-normal">(Coordinación PAE)</span></span>
+
+                        <span class="text-slate-400 font-medium">Para:</span>
+                        <span id="previewTo" class="font-medium text-slate-800 dark:text-slate-200 italic">[Complete el correo de la profesora]</span>
+                        
+                        <span class="text-slate-400 font-medium">Asunto:</span>
+                        <span id="previewSubject" class="font-semibold text-untref-700 dark:text-sky-400">Aspectos organizativos - Seminario PAE</span>
+                    </div>
+                </div>
+
+                <!-- Cuerpo del Correo Editable/Previsualizable -->
+                <div class="p-6 overflow-y-auto flex-1 prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 text-sm leading-relaxed space-y-4" id="emailBody">
+                    <!-- Dinámicamente completado por JavaScript -->
+                </div>
+
+                <!-- Acciones del Correo (Fijadas Abajo) -->
+                <div class="p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center justify-between">
+                    <div class="flex flex-wrap gap-2">
+                        <!-- Copiar Texto -->
+                        <button id="copyBtn" class="px-4 py-2.5 bg-untref-700 hover:bg-untref-800 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-untref-700/10 active:scale-95 flex items-center gap-2">
+                            <i class="fa-regular fa-copy"></i> Copiar Correo
+                        </button>
+                        
+                        <!-- Abrir Cliente de Correo -->
+                        <a id="sendBtn" href="#" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-sky-600/10 active:scale-95 flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Redactar en Outlook/Gmail
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Sistema de Alertas (Notificaciones flotantes) -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 mt-auto transition-colors">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400 dark:text-slate-500">
+            &copy; 2026 Universidad Nacional de Tres de Febrero. Maestría / Especialización PAE.
+        </div>
+    </footer>
+
+    <script>
+        // CONFIGURACIONES Y CONSTANTES DE LA APP
+        const DEFAULT_DEADLINE = "30/9";
+        let recipientMode = "plural"; // 'plural' o 'singular'
+        
+        // Elementos del DOM
+        const profSelect = document.getElementById('profSelect');
+        const profNameInput = document.getElementById('profName');
+        const profEmailInput = document.getElementById('profEmail');
+        const seminarSelect = document.getElementById('seminarSelect');
+        const seminarNameInput = document.getElementById('seminarName');
+        const customScheduleInput = document.getElementById('customSchedule');
+        const inPersonSessionsInput = document.getElementById('inPersonSessions');
+        const remoteSessionsInput = document.getElementById('remoteSessions');
+        const meetingLinkInput = document.getElementById('meetingLink');
+        const studentListInput = document.getElementById('studentList');
+        const customDeadlineInput = document.getElementById('customDeadline');
+        
+        const previewTo = document.getElementById('previewTo');
+        const previewSubject = document.getElementById('previewSubject');
+        const emailBody = document.getElementById('emailBody');
+        const recipientBadge = document.getElementById('recipientBadge');
+        
+        const modePluralBtn = document.getElementById('modePluralBtn');
+        const modeSingularBtn = document.getElementById('modeSingularBtn');
+        
+        const copyBtn = document.getElementById('copyBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const resetFormBtn = document.getElementById('resetFormBtn');
+        
+        const themeToggle = document.getElementById('themeToggle');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // Modo oscuro basado en preferencias previas
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Configuración de los botones de modo de redacción
+        function setRecipientMode(mode) {
+            recipientMode = mode;
+            if (mode === 'plural') {
+                modePluralBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-untref-700 bg-untref-50 dark:bg-slate-700/50 text-untref-800 dark:text-white font-semibold transition-all text-xs";
+                modeSingularBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs";
+                recipientBadge.textContent = "Destinatario: Equipo";
+                recipientBadge.className = "px-2 py-0.5 bg-untref-100 dark:bg-slate-750 text-untref-700 dark:text-slate-300 text-[10px] font-bold rounded-md";
+            } else {
+                modeSingularBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-untref-700 bg-untref-50 dark:bg-slate-700/50 text-untref-800 dark:text-white font-semibold transition-all text-xs";
+                modePluralBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs";
+                recipientBadge.textContent = "Destinatario: Individual";
+                recipientBadge.className = "px-2 py-0.5 bg-sky-100 dark:bg-slate-700 text-sky-750 dark:text-sky-300 text-[10px] font-bold rounded-md";
+            }
+            updatePreview();
+        }
+
+        modePluralBtn.addEventListener('click', () => setRecipientMode('plural'));
+        modeSingularBtn.addEventListener('click', () => setRecipientMode('singular'));
+
+        // Control de los plazos de entrega
+        const deadlineLabels = document.querySelectorAll('#deadlinesContainer label');
+        deadlineLabels.forEach(label => {
+            const input = label.querySelector('input');
+            
+            label.addEventListener('click', () => {
+                deadlineLabels.forEach(l => {
+                    l.classList.remove('border-untref-700', 'bg-untref-50', 'dark:bg-slate-700/50', 'text-untref-800', 'dark:text-white', 'font-semibold');
+                    l.classList.add('border-slate-200', 'dark:border-slate-700');
+                });
+                
+                label.classList.remove('border-slate-200', 'dark:border-slate-700');
+                label.classList.add('border-untref-700', 'bg-untref-50', 'dark:bg-slate-700/50', 'text-untref-800', 'dark:text-white', 'font-semibold');
+                input.checked = true;
+                
+                customDeadlineInput.value = '';
+                updatePreview();
+            });
+        });
+
+        // Configurar acción del selector de seminarios
+        seminarSelect.addEventListener('change', () => {
+            if (seminarSelect.value === 'custom') {
+                seminarNameInput.classList.remove('hidden');
+                seminarNameInput.value = '';
+                seminarNameInput.focus();
+            } else {
+                seminarNameInput.classList.add('hidden');
+                seminarNameInput.value = seminarSelect.value;
+            }
+            updatePreview();
+        });
+
+        // Configurar acción del selector de docentes
+        profSelect.addEventListener('change', () => {
+            if (profSelect.value === 'custom_prof') {
+                profNameInput.classList.remove('hidden');
+                profNameInput.value = '';
+                profNameInput.focus();
+            } else {
+                profNameInput.classList.add('hidden');
+                profNameInput.value = profSelect.value;
+                
+                // Intentar auto-detectar si es singular o plural basándose en el nombre
+                const selectedProf = profSelect.value.toLowerCase();
+                if (selectedProf.includes(' y ') || selectedProf.includes('equipo') || selectedProf.includes(',')) {
+                    setRecipientMode('plural');
+                } else {
+                    setRecipientMode('singular');
+                }
+            }
+            updatePreview();
+        });
+
+        // Mostrar Alertas Toast sin usar Alerts nativos
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white text-sm transform translate-y-2 opacity-0 transition-all duration-300 max-w-md ${
+                type === 'success' ? 'bg-emerald-600' : 'bg-rose-600'
+            }`;
+            
+            const icon = document.createElement('i');
+            icon.className = type === 'success' ? 'fa-solid fa-circle-check text-lg' : 'fa-solid fa-circle-exclamation text-lg';
+            
+            const text = document.createElement('span');
+            text.innerText = message;
+            
+            toast.appendChild(icon);
+            toast.appendChild(text);
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Obtener el listado de horarios seleccionados
+        function getSelectedSchedules() {
+            const checkboxes = document.querySelectorAll('input[name="schedule"]:checked');
+            let selected = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (customScheduleInput.value.trim() !== '') {
+                selected.push(customScheduleInput.value.trim());
+            }
+            
+            return selected.length > 0 ? selected.join('; ') : null;
+        }
+
+        // Obtener la fecha límite de entrega
+        function getSelectedDeadline() {
+            if (customDeadlineInput.value.trim() !== '') {
+                return customDeadlineInput.value.trim();
+            }
+            const checkedRadio = document.querySelector('input[name="deadline"]:checked');
+            return checkedRadio ? checkedRadio.value : DEFAULT_DEADLINE;
+        }
+
+        // Función Principal: Renderizar Vista Previa del Mail (con variaciones plural/singular)
+        function updatePreview() {
+            const isPlural = (recipientMode === 'plural');
+            
+            const defaultName = isPlural ? "<dejar lugar para cargar el nombre de la profesora>" : "<dejar lugar para cargar el nombre del docente>";
+            const profName = profNameInput.value.trim() || defaultName;
+            const profEmail = profEmailInput.value.trim() || "[Sin correo especificado]";
+            const seminarName = seminarNameInput.value.trim() || "[Nombre del Seminario]";
+            
+            const schedule = getSelectedSchedules() || "<Viernes 17 a 22; Sábado de 10 a 14; Sábado de 9 a 13hs; Lunes de 18 a 21hs; Miércoles de 17 a 20hs; Jueves de 17 a 22hs>";
+            const inPerson = inPersonSessionsInput.value.trim() || "<dejar lugar para completar>";
+            const remote = remoteSessionsInput.value.trim() || "<dejar lugar para completar>";
+            const link = meetingLinkInput.value.trim() || "<dejar lugar para completar>";
+            const students = studentListInput.value.trim() || "<dejar lugar para completar>";
+            const deadline = getSelectedDeadline();
+
+            // Variables de concordancia gramatical según el modo
+            const greeting = isPlural ? `Buenas tardes <span class="${profNameInput.value.trim() ? 'font-bold text-slate-900 dark:text-white' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${profName}</span> y equipo.` : `Buenas tardes <span class="${profNameInput.value.trim() ? 'font-bold text-slate-900 dark:text-white' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${profName}</span>.`;
+            const dictaranVerb = isPlural ? "dictarán" : "dictará";
+            const inPersonLabel = isPlural ? "Los encuentros presenciales serán:" : "Los encuentros presenciales serán:";
+            const remoteLabel = isPlural ? "Los encuentros remotos sincrónicos serán:" : "Los encuentros remotos sincrónicos serán:";
+            const keysInstruction = isPlural ? "Deben pedir en seguridad" : "Debe pedir en seguridad";
+            const correctionTerm = isPlural ? "se los enviaremos para la corrección (disponen de un mes aprox)" : "se lo enviaremos para la corrección (dispone de un mes aprox)";
+            const extraPeriod = isPlural ? "disponen, en principio, de otro período" : "dispone, en principio, de otro período";
+            const sendRequest = isPlural ? "les pedimos que nos envíen" : "le pedimos que nos envíe";
+
+            // Configurar campos superiores
+            previewTo.textContent = profEmailInput.value.trim() ? profEmail : "[Asigne dirección en panel izquierdo]";
+            previewSubject.textContent = `Aspectos organizativos - Seminario PAE: ${seminarName}`;
+
+            let htmlContent = `
+                <p>${greeting}</p>
+                
+                <p>Envío algunos aspectos organizativos vinculados con el seminario <strong>${seminarName}</strong> que ${dictaranVerb} próximamente en PAE.</p>
+                
+                <div class="my-4 p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-100 dark:border-slate-700 space-y-2">
+                    <p class="m-0"><strong>Modalidad de cursado:</strong> Mixto</p>
+                    <p class="m-0"><strong>Horario:</strong> <span class="${getSelectedSchedules() ? 'font-semibold text-slate-800 dark:text-slate-200' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${schedule}</span></p>
+                    <p class="m-0"><strong>${inPersonLabel}</strong> <span class="${inPersonSessionsInput.value.trim() ? 'text-slate-800 dark:text-slate-200' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${inPerson}</span></p>
+                    <p class="m-0"><strong>${remoteLabel}</strong> <span class="${remoteSessionsInput.value.trim() ? 'text-slate-800 dark:text-slate-200' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${remote}</span></p>
+                    <p class="m-0"><strong>Enlace:</strong> <span class="${meetingLinkInput.value.trim() ? 'text-sky-600 dark:text-sky-400 underline font-mono' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${link}</span></p>
+                </div>
+
+                <p><strong>Enlace donde está alojada el aula virtual:</strong><br>
+                <a href="https://presenciales.untref.edu.ar/acceso.cgi" target="_blank" class="text-sky-600 dark:text-sky-400 underline font-medium">https://presenciales.untref.edu.ar/acceso.cgi</a></p>
+                
+                <p><strong>Listado de estudiantes:</strong><br>
+                <span class="${studentListInput.value.trim() ? 'block p-3 bg-slate-50 dark:bg-slate-750 rounded-lg font-mono text-xs whitespace-pre-wrap text-slate-600 dark:text-slate-350' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${students}</span></p>
+                
+                <p> Nosotros estaremos cargando a los estudiantes.Están cargados los mails de los alumnos en la planilla por si les quieren enviar la actividad de inicio. Allí deben registrar la asistencia clase a clase y completar la regularidad finalizado el seminario. <em>(Este listado puede sufrir alguna modificación)</em></p>
+                
+                <div class="my-4 p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <p class="mt-0 font-bold text-slate-800 dark:text-slate-200"><i class="fa-solid fa-location-dot text-rose-500 mr-2"></i>Sobre el aula para el dictado de clases presenciales en Maipú 71:</p>
+                    <ol class="list-decimal pl-5 space-y-1 text-xs">
+                        <li>En las carteleras (zona del ascensor del hall de entrada y en cada piso) encontrarán el aula que les han asignado.</li>
+                        <li>${keysInstruction} la llave de esa aula y firmar el retiro de la misma en una planilla.</li>
+                        <li>Una vez finalizada la clase, se debe cerrar el aula con llave, entregarla al personal de seguridad de PB y firmar la planilla nuevamente.</li>
+                    </ol>
+                </div>
+
+                <p><strong>Trabajos finales y carga de calificaciones:</strong> En líneas generales les comentamos que los estudiantes deben realizar un trabajo y disponen hasta el <span class="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold px-2 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/50">${deadline}</span> para enviarlo a la coordinación a la cuenta <a href="mailto:evaluacionpae@untref.edu.ar" class="text-sky-600 dark:text-sky-400 underline">evaluacionpae@untref.edu.ar</a>. Posteriormente, ${correctionTerm}. En caso de que algún alumno no lo presente hasta esa fecha ${extraPeriod}.</p>
+                
+                <p>Por otro lado, una vez cargadas las calificaciones en el SIU, ${sendRequest} a la cuenta evaluación el listado de las mismas.</p>
+                
+                <p>Compartimos un instructivo vinculado con el SIU enviado desde la dirección de posgrado para la carga de calificaciones.</p>
+                
+                <p class="pt-2 border-t border-slate-100 dark:border-slate-700">Quedamos en contacto ante cualquier consulta.</p>
+
+                <div class="pt-4 text-xs text-slate-500 dark:text-slate-400 m-0 leading-relaxed border-t border-slate-100 dark:border-slate-700">
+                    <strong>Coordinación de Seminarios - PAE</strong><br>
+                    Universidad Nacional de Tres de Febrero<br>
+                    <a href="mailto:ggalli@untref.edu.ar" class="text-sky-600 dark:text-sky-400 hover:underline">ggalli@untref.edu.ar</a>
+                </div>
+            `;
+            
+            emailBody.innerHTML = htmlContent;
+
+            const subjectEncoded = encodeURIComponent(`Aspectos organizativos - Seminario PAE: ${seminarName}`);
+            const bodyPlain = getPlaintextEmail();
+            const mailtoUrl = `mailto:${profEmail}?subject=${subjectEncoded}&body=${encodeURIComponent(bodyPlain)}`;
+            sendBtn.href = mailtoUrl;
+        }
+
+        function getPlaintextEmail() {
+            const isPlural = (recipientMode === 'plural');
+            
+            const defaultName = isPlural ? "[Nombre de la Profesora]" : "[Nombre de la Profesora/Profesor]";
+            const profName = profNameInput.value.trim() || defaultName;
+            const seminarName = seminarNameInput.value.trim() || "[Nombre del Seminario]";
+            const schedule = getSelectedSchedules() || "[Días y Horarios]";
+            const inPerson = inPersonSessionsInput.value.trim() || "[Completar encuentros presenciales]";
+            const remote = remoteSessionsInput.value.trim() || "[Completar encuentros remotos]";
+            const link = meetingLinkInput.value.trim() || "[Completar enlace de Zoom/Meet]";
+            const students = studentListInput.value.trim() || "[Completar listado de estudiantes]";
+            const deadline = getSelectedDeadline();
+
+            const greeting = isPlural ? `Buenas tardes ${profName} y equipo.` : `Buenas tardes ${profName}.`;
+            const dictaranVerb = isPlural ? "dictarán" : "dictará";
+            const keysInstruction = isPlural ? "Deben pedir en seguridad" : "Debe pedir en seguridad";
+            const correctionTerm = isPlural ? "se los enviaremos para la corrección (disponen de un mes aprox)" : "se lo enviaremos para la corrección (dispone de un mes aprox)";
+            const extraPeriod = isPlural ? "disponen, en principio, de otro período" : "dispone, en principio, de otro período";
+            const sendRequest = isPlural ? "les pedimos que nos envíen" : "le pedimos que nos envíe";
+
+            return `${greeting}\n\n` +
+                `Envío algunos aspectos organizativos vinculados con el seminario ${seminarName} que ${dictaranVerb} próximamente en PAE.\n\n` +
+                `Modalidad de cursado: Mixto\n` +
+                `Horario: ${schedule}\n` +
+                `Los encuentros presenciales serán: ${inPerson}\n` +
+                `Los encuentros remotos sincrónicos serán: ${remote}\n` +
+                `Enlace: ${link}\n\n` +
+                `Enlace donde está alojada el aula virtual:\n` +
+                `https://presenciales.untref.edu.ar/acceso.cgi Nosotros estaremos cargando a los estudiantes.\n\n` +
+                `Listado de estudiantes:\n` +
+                `${students}\n\n` +
+                `Están cargados los mails de los alumnos en la planilla por si les quieren enviar la actividad de inicio\n` +
+                `Allí deben registrar la asistencia clase a clase y completar la regularidad finalizado el seminario. (Este listado puede sufrir alguna modificación)\n\n` +
+                `Sobre el aula para el dictado de clases presenciales en Maipú 71\n` +
+                `1. En las carteleras (zona del ascensor del hall de entrada y en cada piso) encontrarán el aula que les han asignado.\n` +
+                `2. ${keysInstruction} la llave de esa aula y firmar el retiro de la misma en una planilla.\n` +
+                `3. Una vez finalizada la clase, se debe cerrar el aula con llave, entregarla al personal de seguridad de PB y firmar la planilla nuevamente.\n\n` +
+                `Trabajos finales y carga de calificaciones: En líneas generales les comentamos que los estudiantes deben realizar un trabajo y disponen hasta el ${deadline} para enviarlo a la coordinación a la cuenta evaluacionpae@untref.edu.ar. Posteriormente, ${correctionTerm}. En caso de que algún alumno no lo presente hasta esa fecha ${extraPeriod} de presentación.\n\n` +
+                `Por otro lado, una vez cargadas las calificaciones en el SIU, ${sendRequest} a la cuenta evaluación el listado de las mismas.\n\n` +
+                `Compartimos un instructivo vinculado con el SIU enviado desde la dirección de posgrado para la carga de calificaciones.\n\n` +
+                `Quedamos en contacto ante cualquier consulta.\n\n` +
+                `--\n` +
+                `Coordinación de Seminarios - PAE\n` +
+                `Universidad Nacional de Tres de Febrero\n` +
+                `ggalli@untref.edu.ar`;
+        }
+
+        // Copiar texto
+        copyBtn.addEventListener('click', () => {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = getPlaintextEmail();
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('¡Correo copiado al portapapeles exitosamente!');
+                } else {
+                    showToast('No se pudo copiar el correo, por favor selecciónelo manualmente.', 'error');
+                }
+            } catch (err) {
+                showToast('Error de sistema al copiar.', 'error');
+            }
+            
+            document.body.removeChild(tempTextArea);
+        });
+
+        resetFormBtn.addEventListener('click', () => {
+            if (confirm("¿Desea restablecer el formulario? Se borrarán los datos actuales en edición.")) {
+                document.getElementById('mailForm').reset();
+                
+                profSelect.value = '';
+                profNameInput.value = '';
+                profNameInput.classList.add('hidden');
+                
+                seminarSelect.value = '';
+                seminarNameInput.value = '';
+                seminarNameInput.classList.add('hidden');
+                
+                customScheduleInput.value = '';
+                customDeadlineInput.value = '';
+                setRecipientMode('plural');
+                
+                deadlineLabels.forEach(l => {
+                    l.classList.remove('border-untref-700', 'bg-untref-50', 'dark:bg-slate-700/50', 'text-untref-800', 'dark:text-white', 'font-semibold');
+                    l.classList.add('border-slate-200', 'dark:border-slate-700');
+                });
+                
+                updatePreview();
+                showToast("Formulario restablecido.");
+            }
+        });
+
+        const inputsToListen = [
+            profNameInput, profEmailInput, seminarNameInput, 
+            customScheduleInput, inPersonSessionsInput, 
+            remoteSessionsInput, meetingLinkInput, 
+            studentListInput, customDeadlineInput
+        ];
+        
+        inputsToListen.forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        document.querySelectorAll('input[name="schedule"]').forEach(cb => {
+            cb.addEventListener('change', updatePreview);
+        });
+
+        window.onload = function () {
+            updatePreview();
+        };
+    </script>
+</body>
+</html>
