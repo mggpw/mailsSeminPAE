@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter — FIX 1: wght@ en lugar de wght= -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -27,6 +27,11 @@
                             700: '#2f496e',
                             800: '#243956',
                             900: '#1b2a40',
+                        },
+                        // FIX 2: Definir los colores 750 y 850 que no existen en Tailwind por defecto
+                        slate: {
+                            750: '#263348',
+                            850: '#172033',
                         }
                     }
                 }
@@ -105,7 +110,7 @@
                                     <i class="fa-solid fa-users text-sm"></i>
                                     Equipo (Plural)
                                 </button>
-                                <button type="button" id="modeSingularBtn" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs">
+                                <button type="button" id="modeSingularBtn" class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs">
                                     <i class="fa-solid fa-user text-sm"></i>
                                     Una persona (Singular)
                                 </button>
@@ -211,27 +216,27 @@
                         <div class="space-y-2">
                             <span class="block text-sm font-medium text-slate-700 dark:text-slate-300">Seleccione una o más opciones predefinidas:</span>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="schedulesContainer">
-                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
                                     <input type="checkbox" name="schedule" value="Viernes 17 a 22hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
                                     <span class="text-xs text-slate-700 dark:text-slate-300">Viernes 17 a 22hs</span>
                                 </label>
-                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
                                     <input type="checkbox" name="schedule" value="Sábado de 10 a 14hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
                                     <span class="text-xs text-slate-700 dark:text-slate-300">Sábado 10 a 14hs</span>
                                 </label>
-                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
                                     <input type="checkbox" name="schedule" value="Sábado de 9 a 13hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
                                     <span class="text-xs text-slate-700 dark:text-slate-300">Sábado 9 a 13hs</span>
                                 </label>
-                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
                                     <input type="checkbox" name="schedule" value="Lunes de 18 a 21hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
                                     <span class="text-xs text-slate-700 dark:text-slate-300">Lunes 18 a 21hs</span>
                                 </label>
-                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
                                     <input type="checkbox" name="schedule" value="Miércoles de 17 a 20hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
                                     <span class="text-xs text-slate-700 dark:text-slate-300">Miércoles 17 a 20hs</span>
                                 </label>
-                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 cursor-pointer transition-colors">
+                                <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
                                     <input type="checkbox" name="schedule" value="Jueves de 17 a 22hs" class="rounded text-untref-600 focus:ring-untref-500 h-4 w-4">
                                     <span class="text-xs text-slate-700 dark:text-slate-300">Jueves 17 a 22hs</span>
                                 </label>
@@ -313,7 +318,7 @@
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col overflow-hidden transition-colors flex-1 min-h-[500px]">
                 
                 <!-- Encabezado del "Mail" -->
-                <div class="bg-slate-50 dark:bg-slate-850 p-4 border-b border-slate-200 dark:border-slate-700 space-y-3">
+                <div class="bg-slate-50 dark:bg-slate-900 p-4 border-b border-slate-200 dark:border-slate-700 space-y-3">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
                             <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
@@ -321,7 +326,7 @@
                         </span>
                         
                         <div class="flex items-center gap-2">
-                            <span id="recipientBadge" class="px-2 py-0.5 bg-untref-100 dark:bg-slate-750 text-untref-700 dark:text-slate-300 text-[10px] font-bold rounded-md">
+                            <span id="recipientBadge" class="px-2 py-0.5 bg-untref-100 dark:bg-slate-700 text-untref-700 dark:text-slate-300 text-[10px] font-bold rounded-md">
                                 Destinatario: Equipo
                             </span>
                         </div>
@@ -345,7 +350,7 @@
                 </div>
 
                 <!-- Acciones del Correo (Fijadas Abajo) -->
-                <div class="p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center justify-between">
+                <div class="p-4 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 items-center justify-between">
                     <div class="flex flex-wrap gap-2">
                         <!-- Copiar Texto -->
                         <button id="copyBtn" class="px-4 py-2.5 bg-untref-700 hover:bg-untref-800 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-untref-700/10 active:scale-95 flex items-center gap-2">
@@ -428,14 +433,14 @@
             recipientMode = mode;
             if (mode === 'plural') {
                 modePluralBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-untref-700 bg-untref-50 dark:bg-slate-700/50 text-untref-800 dark:text-white font-semibold transition-all text-xs";
-                modeSingularBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs";
+                modeSingularBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs";
                 recipientBadge.textContent = "Destinatario: Equipo";
-                recipientBadge.className = "px-2 py-0.5 bg-untref-100 dark:bg-slate-750 text-untref-700 dark:text-slate-300 text-[10px] font-bold rounded-md";
+                recipientBadge.className = "px-2 py-0.5 bg-untref-100 dark:bg-slate-700 text-untref-700 dark:text-slate-300 text-[10px] font-bold rounded-md";
             } else {
                 modeSingularBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-untref-700 bg-untref-50 dark:bg-slate-700/50 text-untref-800 dark:text-white font-semibold transition-all text-xs";
-                modePluralBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs";
+                modePluralBtn.className = "flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-xs";
                 recipientBadge.textContent = "Destinatario: Individual";
-                recipientBadge.className = "px-2 py-0.5 bg-sky-100 dark:bg-slate-700 text-sky-750 dark:text-sky-300 text-[10px] font-bold rounded-md";
+                recipientBadge.className = "px-2 py-0.5 bg-sky-100 dark:bg-slate-700 text-sky-700 dark:text-sky-300 text-[10px] font-bold rounded-md";
             }
             updatePreview();
         }
@@ -497,7 +502,7 @@
             updatePreview();
         });
 
-        // Mostrar Alertas Toast sin usar Alerts nativos
+        // Mostrar Alertas Toast
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white text-sm transform translate-y-2 opacity-0 transition-all duration-300 max-w-md ${
@@ -547,7 +552,7 @@
             return checkedRadio ? checkedRadio.value : DEFAULT_DEADLINE;
         }
 
-        // Función Principal: Renderizar Vista Previa del Mail (con variaciones plural/singular)
+        // Función Principal: Renderizar Vista Previa del Mail
         function updatePreview() {
             const isPlural = (recipientMode === 'plural');
             
@@ -563,7 +568,6 @@
             const students = studentListInput.value.trim() || "<dejar lugar para completar>";
             const deadline = getSelectedDeadline();
 
-            // Variables de concordancia gramatical según el modo
             const greeting = isPlural ? `Buenas tardes <span class="${profNameInput.value.trim() ? 'font-bold text-slate-900 dark:text-white' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${profName}</span> y equipo.` : `Buenas tardes <span class="${profNameInput.value.trim() ? 'font-bold text-slate-900 dark:text-white' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${profName}</span>.`;
             const dictaranVerb = isPlural ? "dictarán" : "dictará";
             const inPersonLabel = isPlural ? "Los encuentros presenciales serán:" : "Los encuentros presenciales serán:";
@@ -573,7 +577,6 @@
             const extraPeriod = isPlural ? "disponen, en principio, de otro período" : "dispone, en principio, de otro período";
             const sendRequest = isPlural ? "les pedimos que nos envíen" : "le pedimos que nos envíe";
 
-            // Configurar campos superiores
             previewTo.textContent = profEmailInput.value.trim() ? profEmail : "[Asigne dirección en panel izquierdo]";
             previewSubject.textContent = `Aspectos organizativos - Seminario PAE: ${seminarName}`;
 
@@ -582,7 +585,7 @@
                 
                 <p>Envío algunos aspectos organizativos vinculados con el seminario <strong>${seminarName}</strong> que ${dictaranVerb} próximamente en PAE.</p>
                 
-                <div class="my-4 p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-100 dark:border-slate-700 space-y-2">
+                <div class="my-4 p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700 space-y-2">
                     <p class="m-0"><strong>Modalidad de cursado:</strong> Mixto</p>
                     <p class="m-0"><strong>Horario:</strong> <span class="${getSelectedSchedules() ? 'font-semibold text-slate-800 dark:text-slate-200' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${schedule}</span></p>
                     <p class="m-0"><strong>${inPersonLabel}</strong> <span class="${inPersonSessionsInput.value.trim() ? 'text-slate-800 dark:text-slate-200' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${inPerson}</span></p>
@@ -594,11 +597,11 @@
                 <a href="https://presenciales.untref.edu.ar/acceso.cgi" target="_blank" class="text-sky-600 dark:text-sky-400 underline font-medium">https://presenciales.untref.edu.ar/acceso.cgi</a></p>
                 
                 <p><strong>Listado de estudiantes:</strong><br>
-                <span class="${studentListInput.value.trim() ? 'block p-3 bg-slate-50 dark:bg-slate-750 rounded-lg font-mono text-xs whitespace-pre-wrap text-slate-600 dark:text-slate-350' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${students}</span></p>
+                <span class="${studentListInput.value.trim() ? 'block p-3 bg-slate-50 dark:bg-slate-900 rounded-lg font-mono text-xs whitespace-pre-wrap text-slate-600 dark:text-slate-300' : 'bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 px-1 rounded'}">${students}</span></p>
                 
-                <p> Nosotros estaremos cargando a los estudiantes.Están cargados los mails de los alumnos en la planilla por si les quieren enviar la actividad de inicio. Allí deben registrar la asistencia clase a clase y completar la regularidad finalizado el seminario. <em>(Este listado puede sufrir alguna modificación)</em></p>
+                <p>Nosotros estaremos cargando a los estudiantes. Están cargados los mails de los alumnos en la planilla por si les quieren enviar la actividad de inicio. Allí deben registrar la asistencia clase a clase y completar la regularidad finalizado el seminario. <em>(Este listado puede sufrir alguna modificación)</em></p>
                 
-                <div class="my-4 p-4 bg-slate-50 dark:bg-slate-750 rounded-xl border border-slate-100 dark:border-slate-700">
+                <div class="my-4 p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700">
                     <p class="mt-0 font-bold text-slate-800 dark:text-slate-200"><i class="fa-solid fa-location-dot text-rose-500 mr-2"></i>Sobre el aula para el dictado de clases presenciales en Maipú 71:</p>
                     <ol class="list-decimal pl-5 space-y-1 text-xs">
                         <li>En las carteleras (zona del ascensor del hall de entrada y en cada piso) encontrarán el aula que les han asignado.</li>
@@ -648,7 +651,7 @@
             const keysInstruction = isPlural ? "Deben pedir en seguridad" : "Debe pedir en seguridad";
             const correctionTerm = isPlural ? "se los enviaremos para la corrección (disponen de un mes aprox)" : "se lo enviaremos para la corrección (dispone de un mes aprox)";
             const extraPeriod = isPlural ? "disponen, en principio, de otro período" : "dispone, en principio, de otro período";
-            const sendRequest = isPlural ? "les pedimos que nos envíen" : "le pedimos que nos envíe";
+            const sendRequest = isPlural ? "les pedimos que nos envíen" : "le pedimos que nos envíen";
 
             return `${greeting}\n\n` +
                 `Envío algunos aspectos organizativos vinculados con el seminario ${seminarName} que ${dictaranVerb} próximamente en PAE.\n\n` +
@@ -658,12 +661,12 @@
                 `Los encuentros remotos sincrónicos serán: ${remote}\n` +
                 `Enlace: ${link}\n\n` +
                 `Enlace donde está alojada el aula virtual:\n` +
-                `https://presenciales.untref.edu.ar/acceso.cgi Nosotros estaremos cargando a los estudiantes.\n\n` +
+                `https://presenciales.untref.edu.ar/acceso.cgi\n\n` +
                 `Listado de estudiantes:\n` +
                 `${students}\n\n` +
-                `Están cargados los mails de los alumnos en la planilla por si les quieren enviar la actividad de inicio\n` +
+                `Nosotros estaremos cargando a los estudiantes. Están cargados los mails de los alumnos en la planilla por si les quieren enviar la actividad de inicio.\n` +
                 `Allí deben registrar la asistencia clase a clase y completar la regularidad finalizado el seminario. (Este listado puede sufrir alguna modificación)\n\n` +
-                `Sobre el aula para el dictado de clases presenciales en Maipú 71\n` +
+                `Sobre el aula para el dictado de clases presenciales en Maipú 71:\n` +
                 `1. En las carteleras (zona del ascensor del hall de entrada y en cada piso) encontrarán el aula que les han asignado.\n` +
                 `2. ${keysInstruction} la llave de esa aula y firmar el retiro de la misma en una planilla.\n` +
                 `3. Una vez finalizada la clase, se debe cerrar el aula con llave, entregarla al personal de seguridad de PB y firmar la planilla nuevamente.\n\n` +
@@ -677,26 +680,38 @@
                 `ggalli@untref.edu.ar`;
         }
 
-        // Copiar texto
+        // FIX 3: Reemplazar execCommand (deprecado) por navigator.clipboard.writeText (moderno)
         copyBtn.addEventListener('click', () => {
+            const textToCopy = getPlaintextEmail();
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        showToast('¡Correo copiado al portapapeles exitosamente!');
+                    })
+                    .catch(() => {
+                        fallbackCopy(textToCopy);
+                    });
+            } else {
+                fallbackCopy(textToCopy);
+            }
+        });
+
+        function fallbackCopy(text) {
             const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = getPlaintextEmail();
+            tempTextArea.value = text;
+            tempTextArea.style.position = 'fixed';
+            tempTextArea.style.opacity = '0';
             document.body.appendChild(tempTextArea);
             tempTextArea.select();
-            
             try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast('¡Correo copiado al portapapeles exitosamente!');
-                } else {
-                    showToast('No se pudo copiar el correo, por favor selecciónelo manualmente.', 'error');
-                }
+                document.execCommand('copy');
+                showToast('¡Correo copiado al portapapeles exitosamente!');
             } catch (err) {
-                showToast('Error de sistema al copiar.', 'error');
+                showToast('No se pudo copiar. Selecciónelo manualmente.', 'error');
             }
-            
             document.body.removeChild(tempTextArea);
-        });
+        }
 
         resetFormBtn.addEventListener('click', () => {
             if (confirm("¿Desea restablecer el formulario? Se borrarán los datos actuales en edición.")) {
